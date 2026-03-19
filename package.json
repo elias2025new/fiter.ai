@@ -4,9 +4,7 @@
   "description": "Fiter.ai Telegram Registration Bot",
   "main": "api/webhook.ts",
   "scripts": {
-    "dev": "vercel dev",
-    "build": "tsc",
-    "start": "node dist/api/webhook.js"
+    "dev": "vercel dev"
   },
   "dependencies": {
     "@grammyjs/conversations": "^1.2.0",

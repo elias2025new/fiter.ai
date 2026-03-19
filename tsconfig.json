@@ -7,8 +7,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "dist",
-    "rootDir": "."
+    "skipLibCheck": true
   },
   "include": ["api/**/*.ts", "bot/**/*.ts", "utils/**/*.ts"],
   "exclude": ["node_modules", ".vercel"]
