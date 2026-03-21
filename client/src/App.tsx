@@ -5,7 +5,7 @@ import { Loader2, CheckCircle2, AlertCircle, ChevronRight } from 'lucide-react';
 // Telegram WebApp SDK
 const tg = (window as any).Telegram?.WebApp;
 
-const LAUNCH_DATE = new Date('2025-04-01T00:00:00+03:00');
+const LAUNCH_DATE = new Date('2026-04-01T00:00:00+03:00');
 
 function useCountdown() {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
