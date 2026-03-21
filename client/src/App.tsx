@@ -197,17 +197,31 @@ function App() {
                   />
                 </div>
 
-                <div className="flex flex-col items-center gap-2 py-2">
-                  <div className="w-20 h-20 rounded-full border-2 border-blue-200 p-1 bg-white overflow-hidden shadow-[0_0_20px_rgba(59,130,246,0.15)]">
-                    <img 
-                      src="/course_icon.png" 
-                      alt="Prompt Engineering" 
-                      className="w-full h-full object-cover rounded-full"
-                    />
+                <div className="flex justify-center items-start gap-6 py-2">
+                  <div className="flex flex-col items-center gap-1.5">
+                    <div className="w-18 h-18 rounded-full border-2 border-blue-200 p-1 bg-white overflow-hidden shadow-[0_0_20px_rgba(59,130,246,0.15)]" style={{width:'72px',height:'72px'}}>
+                      <img 
+                        src="/course_icon.png" 
+                        alt="Prompt Engineering" 
+                        className="w-full h-full object-cover rounded-full"
+                      />
+                    </div>
+                    <p className="text-[9px] font-bold text-blue-700 tracking-[0.12em] uppercase text-center max-w-[72px]">
+                      Prompt Engineering
+                    </p>
                   </div>
-                  <p className="text-[10px] font-bold text-blue-700 tracking-[0.2em] uppercase">
-                    Prompt Engineering
-                  </p>
+                  <div className="flex flex-col items-center gap-1.5">
+                    <div className="rounded-full border-2 border-orange-200 p-1 bg-white overflow-hidden shadow-[0_0_20px_rgba(249,115,22,0.15)]" style={{width:'72px',height:'72px'}}>
+                      <img 
+                        src="/ai_web_dev_icon.png" 
+                        alt="AI Web & App Development" 
+                        className="w-full h-full object-cover rounded-full"
+                      />
+                    </div>
+                    <p className="text-[9px] font-bold text-orange-600 tracking-[0.12em] uppercase text-center max-w-[72px]">
+                      AI Web & App Dev
+                    </p>
+                  </div>
                 </div>
                 <button
                   type="button"
