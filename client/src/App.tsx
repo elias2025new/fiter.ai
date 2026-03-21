@@ -250,13 +250,6 @@ function App() {
           </AnimatePresence>
         </form>
       </motion.div>
-    </div>
-  );
-}
-
-export default App;
-motion.div>
-      
       <footer className="mt-auto py-8 text-center relative z-10">
         <p className="text-slate-500 text-sm flex items-center gap-2">
           Secure Registration • Powered by Fiter.ai
