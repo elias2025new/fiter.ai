@@ -50,6 +50,10 @@ function App() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    if (!formData.email) {
+      setError('Email address is required.');
+      return;
+    }
     if (!validateEmail(formData.email)) {
       setError('Please enter a valid email address.');
       return;
@@ -146,7 +150,7 @@ function App() {
         layout
         className="w-full max-w-sm bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] p-6 shadow-2xl relative z-10"
       >
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} noValidate className="space-y-5">
           <AnimatePresence mode="wait">
             {step === 1 ? (
               <motion.div
