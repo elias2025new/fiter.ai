@@ -190,6 +190,19 @@ function App() {
                     onChange={(e) => setFormData({...formData, phoneNumber: e.target.value})}
                   />
                 </div>
+
+                <div className="flex flex-col items-center gap-2 py-2">
+                  <div className="w-20 h-20 rounded-full border-2 border-cyan-500/30 p-1 bg-slate-900/50 overflow-hidden shadow-[0_0_20px_rgba(6,182,212,0.2)]">
+                    <img 
+                      src="/course_icon.png" 
+                      alt="Prompt Engineering" 
+                      className="w-full h-full object-cover rounded-full"
+                    />
+                  </div>
+                  <p className="text-[10px] font-bold text-cyan-400 tracking-[0.2em] uppercase">
+                    Prompt Engineering
+                  </p>
+                </div>
                 <button
                   type="button"
                   onClick={handleNext}
