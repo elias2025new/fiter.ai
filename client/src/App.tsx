@@ -269,11 +269,25 @@ function App() {
           <AnimatePresence>
             {error && (
               <motion.div 
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                className="flex items-center gap-2 text-red-400 text-xs bg-red-500/10 p-3 rounded-xl border border-red-500/20"
+                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                animate={{ 
+                  opacity: 1, 
+                  y: 0, 
+                  scale: 1,
+                  x: [0, -4, 4, -4, 4, 0] 
+                }}
+                transition={{ 
+                  type: 'spring',
+                  stiffness: 100,
+                  damping: 15,
+                  x: { duration: 0.4, times: [0, 0.2, 0.4, 0.6, 0.8, 1] }
+                }}
+                exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.2 } }}
+                className="flex items-center gap-3 text-red-400 text-xs font-semibold bg-red-500/10 p-4 rounded-2xl border border-red-500/20 shadow-[0_10px_30px_rgba(239,68,68,0.1)] mb-4"
               >
-                <AlertCircle size={14} />
+                <div className="bg-red-500/20 p-2 rounded-lg">
+                  <AlertCircle size={16} className="text-red-500" />
+                </div>
                 <span>{error}</span>
               </motion.div>
             )}
