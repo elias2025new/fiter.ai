@@ -29,6 +29,12 @@ function App() {
     if (tg) {
       tg.ready();
       tg.expand();
+      try {
+        if (tg.requestFullscreen) tg.requestFullscreen();
+        if (tg.disableVerticalSwipes) tg.disableVerticalSwipes();
+      } catch (e) {
+        console.warn('Fullscreen API not supported', e);
+      }
       document.documentElement.style.setProperty('--tg-bg', tg.backgroundColor || '#0f172a');
       document.documentElement.style.setProperty('--tg-text', tg.textColor || '#f8fafc');
     }
@@ -116,7 +122,7 @@ function App() {
           <CheckCircle2 size={64} className="text-green-600" />
         </motion.div>
         <h1 className="text-3xl font-extrabold mb-2 bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text text-transparent">
-          Welcome!
+          Welcome to Fiter.ai!
         </h1>
         <p className="text-slate-600 max-w-xs mx-auto">
           Registration complete. We'll reach out shortly!
@@ -132,14 +138,32 @@ function App() {
         <div className="absolute bottom-[-10%] left-[-10%] w-[250px] h-[250px] bg-orange-400/15 rounded-full blur-[80px]" />
       </div>
 
-      <motion.div 
-        layout
-        className="w-full max-w-sm relative z-10 p-4 mt-8 flex-1 flex flex-col justify-center"
-      >
-        <div className="flex justify-center gap-1.5 mb-10">
+      <header className="w-full max-w-sm mb-6 text-center relative z-10">
+        <motion.h1 
+          className="text-4xl font-black mb-1 tracking-tighter"
+        >
+          <span className="bg-gradient-to-r from-blue-700 to-indigo-600 bg-clip-text text-transparent uppercase drop-shadow-sm">
+            FITER.AI
+          </span>
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0, y: 5 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="text-[10px] font-bold tracking-[0.2em] text-blue-600/80 uppercase mb-4"
+        >
+          AI Engineering Masterclass: From Zero to AI Hero
+        </motion.p>
+        <div className="flex justify-center gap-1.5">
           <div className={`h-1.5 w-8 rounded-full transition-all duration-500 ${step === 1 ? 'bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.4)]' : 'bg-slate-200'}`} />
           <div className={`h-1.5 w-8 rounded-full transition-all duration-500 ${step === 2 ? 'bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.4)]' : 'bg-slate-200'}`} />
         </div>
+      </header>
+
+      <motion.div 
+        layout
+        className="w-full max-w-sm bg-white/80 backdrop-blur-xl border border-slate-200/50 rounded-[2rem] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.06)] relative z-10"
+      >
         <form onSubmit={handleSubmit} noValidate className="space-y-5">
           <AnimatePresence mode="wait">
             {step === 1 ? (
@@ -301,6 +325,11 @@ function App() {
           </AnimatePresence>
         </form>
       </motion.div>
+      <footer className="mt-auto py-8 text-center relative z-10">
+        <p className="text-slate-400 text-sm flex items-center gap-2">
+          Secure Registration • Powered by Fiter.ai
+        </p>
+      </footer>
     </div>
   );
 }
