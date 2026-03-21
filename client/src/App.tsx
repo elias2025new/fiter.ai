@@ -37,14 +37,22 @@ function App() {
   const handleNext = () => {
     if (!formData.fullName.trim()) {
       setError('Please enter your full name.');
+      if (tg) tg.HapticFeedback.notificationOccurred('error');
+      return;
+    }
+    if (!formData.phoneNumber.trim()) {
+      setError('Please enter your phone number.');
+      if (tg) tg.HapticFeedback.notificationOccurred('error');
       return;
     }
     if (!validatePhone(formData.phoneNumber)) {
-      setError('Enter a valid Ethiopian phone number.');
+      setError('Please enter a valid Ethiopian phone number.');
+      if (tg) tg.HapticFeedback.notificationOccurred('error');
       return;
     }
     setError(null);
     setStep(2);
+    if (tg) tg.HapticFeedback.impactOccurred('medium');
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
