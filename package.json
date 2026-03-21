@@ -1,20 +1,15 @@
 {
-  "name": "fiter-ai-bot",
+  "name": "fiter-ai",
   "version": "1.0.0",
-  "description": "Fiter.ai Telegram Registration Bot",
-  "main": "api/webhook.ts",
+  "description": "Fiter.ai - Telegram Mini App with React + Express",
   "scripts": {
-    "dev": "vercel dev"
-  },
-  "dependencies": {
-    "@grammyjs/conversations": "^1.2.0",
-    "@supabase/supabase-js": "^2.39.7",
-    "dotenv": "^16.4.5",
-    "grammy": "^1.21.1"
+    "install:all": "npm install --prefix client && npm install --prefix server",
+    "client": "npm run dev --prefix client",
+    "server": "npm run dev --prefix server",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "build": "npm run build --prefix client && npm run build --prefix server"
   },
   "devDependencies": {
-    "@types/node": "^20.11.24",
-    "typescript": "^5.3.3",
-    "vercel": "^33.5.3"
+    "concurrently": "^8.2.2"
   }
 }
