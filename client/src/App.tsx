@@ -107,18 +107,18 @@ function App() {
 
   if (success) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-6 text-center bg-slate-950 text-white">
+      <div className="flex flex-col items-center justify-center min-h-screen p-6 text-center bg-slate-50 text-slate-900">
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          className="bg-green-500/10 p-6 rounded-full mb-6 border border-green-500/20"
+          className="bg-green-100 p-6 rounded-full mb-6 border border-green-200 shadow-sm"
         >
-          <CheckCircle2 size={64} className="text-green-500" />
+          <CheckCircle2 size={64} className="text-green-600" />
         </motion.div>
-        <h1 className="text-3xl font-extrabold mb-2 bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent">
+        <h1 className="text-3xl font-extrabold mb-2 bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text text-transparent">
           Welcome to Fiter.ai!
         </h1>
-        <p className="text-slate-400 max-w-xs mx-auto">
+        <p className="text-slate-600 max-w-xs mx-auto">
           Registration complete. We'll reach out shortly!
         </p>
       </div>
@@ -126,17 +126,17 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0f172a] text-slate-100 p-4 flex flex-col items-center justify-center overflow-x-hidden">
+    <div className="min-h-screen bg-slate-50 text-slate-900 p-4 flex flex-col items-center justify-center overflow-x-hidden selection:bg-blue-100">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] right-[-10%] w-[300px] h-[300px] bg-cyan-500/10 rounded-full blur-[80px]" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[250px] h-[250px] bg-blue-600/10 rounded-full blur-[80px]" />
+        <div className="absolute top-[-10%] right-[-10%] w-[300px] h-[300px] bg-blue-400/20 rounded-full blur-[80px]" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[250px] h-[250px] bg-orange-400/15 rounded-full blur-[80px]" />
       </div>
 
       <header className="w-full max-w-sm mb-6 text-center relative z-10">
         <motion.h1 
           className="text-4xl font-black mb-1 tracking-tighter"
         >
-          <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent uppercase">
+          <span className="bg-gradient-to-r from-blue-700 to-indigo-600 bg-clip-text text-transparent uppercase drop-shadow-sm">
             FITER.AI
           </span>
         </motion.h1>
@@ -144,19 +144,19 @@ function App() {
           initial={{ opacity: 0, y: 5 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase mb-4"
+          className="text-[10px] font-bold tracking-[0.2em] text-blue-600/80 uppercase mb-4"
         >
           AI Engineering Masterclass: From Zero to AI Hero
         </motion.p>
         <div className="flex justify-center gap-1.5">
-          <div className={`h-1 w-8 rounded-full transition-all duration-500 ${step === 1 ? 'bg-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.5)]' : 'bg-slate-800'}`} />
-          <div className={`h-1 w-8 rounded-full transition-all duration-500 ${step === 2 ? 'bg-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.5)]' : 'bg-slate-800'}`} />
+          <div className={`h-1.5 w-8 rounded-full transition-all duration-500 ${step === 1 ? 'bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.4)]' : 'bg-slate-200'}`} />
+          <div className={`h-1.5 w-8 rounded-full transition-all duration-500 ${step === 2 ? 'bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.4)]' : 'bg-slate-200'}`} />
         </div>
       </header>
 
       <motion.div 
         layout
-        className="w-full max-w-sm bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] p-6 shadow-2xl relative z-10"
+        className="w-full max-w-sm bg-white/80 backdrop-blur-xl border border-slate-200/50 rounded-[2rem] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.06)] relative z-10"
       >
         <form onSubmit={handleSubmit} noValidate className="space-y-5">
           <AnimatePresence mode="wait">
@@ -169,22 +169,22 @@ function App() {
                 className="space-y-5"
               >
                 <div>
-                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">Full Name</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 ml-1">Full Name</label>
                   <input
                     type="text"
                     required
-                    className="w-full bg-slate-900/50 border border-slate-800 rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-all placeholder:text-slate-700"
+                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-400"
                     placeholder="Enter name"
                     value={formData.fullName}
                     onChange={(e) => setFormData({...formData, fullName: e.target.value})}
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">Phone Number</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 ml-1">Phone Number</label>
                   <input
                     type="tel"
                     required
-                    className="w-full bg-slate-900/50 border border-slate-800 rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-all placeholder:text-slate-700"
+                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-400"
                     placeholder="0911223344"
                     value={formData.phoneNumber}
                     onChange={(e) => setFormData({...formData, phoneNumber: e.target.value})}
@@ -192,21 +192,21 @@ function App() {
                 </div>
 
                 <div className="flex flex-col items-center gap-2 py-2">
-                  <div className="w-20 h-20 rounded-full border-2 border-cyan-500/30 p-1 bg-slate-900/50 overflow-hidden shadow-[0_0_20px_rgba(6,182,212,0.2)]">
+                  <div className="w-20 h-20 rounded-full border-2 border-blue-200 p-1 bg-white overflow-hidden shadow-[0_0_20px_rgba(59,130,246,0.15)]">
                     <img 
                       src="/course_icon.png" 
                       alt="Prompt Engineering" 
                       className="w-full h-full object-cover rounded-full"
                     />
                   </div>
-                  <p className="text-[10px] font-bold text-cyan-400 tracking-[0.2em] uppercase">
+                  <p className="text-[10px] font-bold text-blue-700 tracking-[0.2em] uppercase">
                     Prompt Engineering
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={handleNext}
-                  className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold py-4 rounded-2xl shadow-lg shadow-cyan-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 text-lg"
+                  className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-4 rounded-2xl shadow-lg shadow-orange-500/30 active:scale-[0.98] transition-all flex items-center justify-center gap-2 text-lg"
                 >
                   Continue <ChevronRight size={20} />
                 </button>
@@ -220,18 +220,18 @@ function App() {
                 className="space-y-5"
               >
                 <div>
-                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">Email Address</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 ml-1">Email Address</label>
                   <input
                     type="email"
                     required
-                    className="w-full bg-slate-900/50 border border-slate-800 rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-all placeholder:text-slate-700"
+                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-400"
                     placeholder="name@email.com"
                     value={formData.email}
                     onChange={(e) => setFormData({...formData, email: e.target.value})}
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 ml-1">Experience Level</label>
+                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Experience Level</label>
                   <div className="grid grid-cols-1 gap-3">
                     {[
                       { id: 'Beginner', label: 'Beginner', desc: 'New to AI & Coding' },
@@ -244,19 +244,19 @@ function App() {
                         onClick={() => setFormData({...formData, experience: opt.id})}
                         className={`relative overflow-hidden text-left p-4 rounded-2xl border transition-all duration-300 group ${
                           formData.experience === opt.id 
-                            ? 'bg-cyan-500/10 border-cyan-500/50 shadow-[0_0_20px_rgba(6,182,212,0.1)]' 
-                            : 'bg-slate-900/50 border-slate-800 hover:border-slate-700'
+                            ? 'bg-blue-50 border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.15)]' 
+                            : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50'
                         }`}
                       >
                         <div className="flex items-center justify-between relative z-10">
                           <div>
-                            <p className={`font-bold text-sm ${formData.experience === opt.id ? 'text-cyan-400' : 'text-slate-200'}`}>
+                            <p className={`font-bold text-sm ${formData.experience === opt.id ? 'text-blue-700' : 'text-slate-700'}`}>
                               {opt.label}
                             </p>
                             <p className="text-[10px] text-slate-500 mt-0.5">{opt.desc}</p>
                           </div>
                           <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
-                            formData.experience === opt.id ? 'border-cyan-500 bg-cyan-500' : 'border-slate-800'
+                            formData.experience === opt.id ? 'border-blue-500 bg-blue-500' : 'border-slate-300'
                           }`}>
                             {formData.experience === opt.id && <CheckCircle2 size={12} className="text-white" />}
                           </div>
@@ -264,7 +264,7 @@ function App() {
                         {formData.experience === opt.id && (
                           <motion.div 
                             layoutId="active-bg"
-                            className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 to-blue-500/5"
+                            className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-indigo-500/5"
                           />
                         )}
                       </button>
@@ -275,14 +275,14 @@ function App() {
                   <button
                     type="button"
                     onClick={() => setStep(1)}
-                    className="flex-1 bg-slate-800 text-white font-bold py-4 rounded-2xl active:scale-[0.98] transition-all"
+                    className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-4 rounded-2xl active:scale-[0.98] transition-all"
                   >
                     Back
                   </button>
                   <button
                     type="submit"
                     disabled={loading}
-                    className="flex-[2] bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold py-4 rounded-2xl shadow-lg shadow-cyan-500/20 active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                    className="flex-[2] bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-4 rounded-2xl shadow-lg shadow-orange-500/30 active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-2"
                   >
                     {loading ? <Loader2 className="animate-spin" /> : 'Join Fiter.ai'}
                   </button>
@@ -308,9 +308,9 @@ function App() {
                   x: { duration: 0.4, times: [0, 0.2, 0.4, 0.6, 0.8, 1] }
                 }}
                 exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.2 } }}
-                className="flex items-center gap-3 text-red-400 text-xs font-semibold bg-red-500/10 p-4 rounded-2xl border border-red-500/20 shadow-[0_10px_30px_rgba(239,68,68,0.1)] mb-4"
+                className="flex items-center gap-3 text-red-700 text-xs font-semibold bg-red-50 p-4 rounded-2xl border border-red-200 shadow-sm mb-4"
               >
-                <div className="bg-red-500/20 p-2 rounded-lg">
+                <div className="bg-white p-2 rounded-lg shadow-sm border border-red-100">
                   <AlertCircle size={16} className="text-red-500" />
                 </div>
                 <span>{error}</span>
@@ -320,7 +320,7 @@ function App() {
         </form>
       </motion.div>
       <footer className="mt-auto py-8 text-center relative z-10">
-        <p className="text-slate-500 text-sm flex items-center gap-2">
+        <p className="text-slate-400 text-sm flex items-center gap-2">
           Secure Registration • Powered by Fiter.ai
         </p>
       </footer>
