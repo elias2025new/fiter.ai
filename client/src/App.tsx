@@ -2,12 +2,91 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Loader2, CheckCircle2, AlertCircle, ChevronRight } from 'lucide-react';
 
-// Telegram WebApp SDK Mock for development
+// Telegram WebApp SDK
 const tg = (window as any).Telegram?.WebApp;
+
+const LAUNCH_DATE = new Date('2025-04-01T00:00:00+03:00');
+
+function useCountdown() {
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  useEffect(() => {
+    const tick = () => {
+      const diff = LAUNCH_DATE.getTime() - Date.now();
+      if (diff <= 0) {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        return;
+      }
+      setTimeLeft({
+        days: Math.floor(diff / 86400000),
+        hours: Math.floor((diff % 86400000) / 3600000),
+        minutes: Math.floor((diff % 3600000) / 60000),
+        seconds: Math.floor((diff % 60000) / 1000),
+      });
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
+  return timeLeft;
+}
+
+function CountdownScreen() {
+  const { days, hours, minutes, seconds } = useCountdown();
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen px-6 py-16 text-center bg-slate-50 text-slate-900">
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-[-10%] right-[-10%] w-[300px] h-[300px] bg-blue-400/20 rounded-full blur-[80px]" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[250px] h-[250px] bg-orange-400/15 rounded-full blur-[80px]" />
+      </div>
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="relative z-10 w-full max-w-sm"
+      >
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+          className="bg-green-100 p-5 rounded-full mb-5 border border-green-200 shadow-sm inline-flex"
+        >
+          <CheckCircle2 size={52} className="text-green-600" />
+        </motion.div>
+
+        <h1 className="text-3xl font-extrabold mb-1 bg-gradient-to-r from-blue-700 to-indigo-600 bg-clip-text text-transparent">
+          Welcome to Fiter.ai!
+        </h1>
+        <p className="text-slate-500 text-sm mb-8">Registration complete</p>
+
+        <div className="bg-white/80 backdrop-blur-xl border border-slate-200/50 rounded-[2rem] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.06)] mb-4">
+          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">
+            🚀 Cohort Starts In
+          </p>
+          <div className="grid grid-cols-4 gap-2">
+            {[{ v: days, l: 'Days' }, { v: hours, l: 'Hours' }, { v: minutes, l: 'Mins' }, { v: seconds, l: 'Secs' }].map(({ v, l }) => (
+              <div key={l} className="flex flex-col items-center bg-slate-50 rounded-2xl py-3 px-1 border border-slate-100">
+                <span className="text-2xl font-black text-blue-700 tabular-nums">
+                  {String(v).padStart(2, '0')}
+                </span>
+                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">{l}</span>
+              </div>
+            ))}
+          </div>
+          <p className="text-slate-500 text-xs mt-4 font-medium">
+            April 1, 2025 · Addis Ababa Time
+          </p>
+        </div>
+
+        <p className="text-slate-400 text-xs">
+          We'll notify you before the cohort begins • Fiter.ai
+        </p>
+      </motion.div>
+    </div>
+  );
+}
 
 function App() {
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [registered, setRegistered] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -38,7 +117,25 @@ function App() {
       document.documentElement.style.setProperty('--tg-bg', tg.backgroundColor || '#0f172a');
       document.documentElement.style.setProperty('--tg-text', tg.textColor || '#f8fafc');
     }
+
+    // Check if user already registered via this device/browser
+    const userId = tg?.initDataUnsafe?.user?.id?.toString() || null;
+    const storageKey = userId ? `fiter_registered_${userId}` : 'fiter_registered_guest';
+    if (localStorage.getItem(storageKey) === 'true') {
+      setRegistered(true);
+    }
   }, []);
+
+  const markRegistered = () => {
+    const userId = tg?.initDataUnsafe?.user?.id?.toString() || null;
+    const storageKey = userId ? `fiter_registered_${userId}` : 'fiter_registered_guest';
+    localStorage.setItem(storageKey, 'true');
+    setRegistered(true);
+  };
+
+  if (registered) {
+    return <CountdownScreen />;
+  }
 
   const handleNext = () => {
     if (!formData.fullName.trim()) {
@@ -95,11 +192,8 @@ function App() {
       const result = await response.json();
 
       if (response.ok) {
-        setSuccess(true);
-        if (tg) {
-          tg.HapticFeedback.notificationOccurred('success');
-          setTimeout(() => tg.close(), 3000);
-        }
+        markRegistered();
+        if (tg) tg.HapticFeedback.notificationOccurred('success');
       } else {
         throw new Error(result.error || 'Registration failed');
       }
@@ -110,26 +204,6 @@ function App() {
       setLoading(false);
     }
   };
-
-  if (success) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-6 text-center bg-slate-50 text-slate-900">
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          className="bg-green-100 p-6 rounded-full mb-6 border border-green-200 shadow-sm"
-        >
-          <CheckCircle2 size={64} className="text-green-600" />
-        </motion.div>
-        <h1 className="text-3xl font-extrabold mb-2 bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text text-transparent">
-          Welcome to Fiter.ai!
-        </h1>
-        <p className="text-slate-600 max-w-xs mx-auto">
-          Registration complete. We'll reach out shortly!
-        </p>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 px-4 pb-4 pt-16 flex flex-col items-center justify-center overflow-x-hidden selection:bg-blue-100">
