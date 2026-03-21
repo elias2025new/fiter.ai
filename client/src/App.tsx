@@ -206,22 +206,44 @@ function App() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">Experience Level</label>
-                  <div className="relative">
-                    <select
-                      required
-                      className="w-full bg-slate-900/50 border border-slate-800 rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-all appearance-none cursor-pointer"
-                      value={formData.experience}
-                      onChange={(e) => setFormData({...formData, experience: e.target.value})}
-                    >
-                      <option value="" disabled className="bg-slate-950">Select your level</option>
-                      <option value="Beginner" className="bg-slate-950">Beginner</option>
-                      <option value="Intermediate" className="bg-slate-950">Intermediate</option>
-                      <option value="Advanced" className="bg-slate-950">Advanced</option>
-                    </select>
-                    <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500">
-                      <ChevronRight size={18} className="rotate-90" />
-                    </div>
+                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 ml-1">Experience Level</label>
+                  <div className="grid grid-cols-1 gap-3">
+                    {[
+                      { id: 'Beginner', label: 'Beginner', desc: 'New to AI & Coding' },
+                      { id: 'Intermediate', label: 'Intermediate', desc: 'Some experience' },
+                      { id: 'Advanced', label: 'Advanced', desc: 'Professional level' }
+                    ].map((opt) => (
+                      <button
+                        key={opt.id}
+                        type="button"
+                        onClick={() => setFormData({...formData, experience: opt.id})}
+                        className={`relative overflow-hidden text-left p-4 rounded-2xl border transition-all duration-300 group ${
+                          formData.experience === opt.id 
+                            ? 'bg-cyan-500/10 border-cyan-500/50 shadow-[0_0_20px_rgba(6,182,212,0.1)]' 
+                            : 'bg-slate-900/50 border-slate-800 hover:border-slate-700'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between relative z-10">
+                          <div>
+                            <p className={`font-bold text-sm ${formData.experience === opt.id ? 'text-cyan-400' : 'text-slate-200'}`}>
+                              {opt.label}
+                            </p>
+                            <p className="text-[10px] text-slate-500 mt-0.5">{opt.desc}</p>
+                          </div>
+                          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
+                            formData.experience === opt.id ? 'border-cyan-500 bg-cyan-500' : 'border-slate-800'
+                          }`}>
+                            {formData.experience === opt.id && <CheckCircle2 size={12} className="text-white" />}
+                          </div>
+                        </div>
+                        {formData.experience === opt.id && (
+                          <motion.div 
+                            layoutId="active-bg"
+                            className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 to-blue-500/5"
+                          />
+                        )}
+                      </button>
+                    ))}
                   </div>
                 </div>
                 <div className="flex gap-2">
