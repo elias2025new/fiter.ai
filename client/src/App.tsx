@@ -124,13 +124,21 @@ function App() {
         <motion.h1 
           className="text-4xl font-black mb-1 tracking-tighter"
         >
-          <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent uppercase">
             FITER.AI
           </span>
         </motion.h1>
-        <div className="flex justify-center gap-1.5 mt-4">
-          <div className={`h-1 w-8 rounded-full transition-all ${step === 1 ? 'bg-cyan-500' : 'bg-slate-700'}`} />
-          <div className={`h-1 w-8 rounded-full transition-all ${step === 2 ? 'bg-cyan-500' : 'bg-slate-700'}`} />
+        <motion.p
+          initial={{ opacity: 0, y: 5 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase mb-4"
+        >
+          AI Engineering Masterclass: From Zero to AI Hero
+        </motion.p>
+        <div className="flex justify-center gap-1.5">
+          <div className={`h-1 w-8 rounded-full transition-all duration-500 ${step === 1 ? 'bg-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.5)]' : 'bg-slate-800'}`} />
+          <div className={`h-1 w-8 rounded-full transition-all duration-500 ${step === 2 ? 'bg-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.5)]' : 'bg-slate-800'}`} />
         </div>
       </header>
 
