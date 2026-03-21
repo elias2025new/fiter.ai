@@ -132,7 +132,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 p-4 flex flex-col items-center justify-center overflow-x-hidden selection:bg-blue-100">
+    <div className="min-h-screen bg-slate-50 text-slate-900 px-4 pb-4 pt-16 flex flex-col items-center justify-center overflow-x-hidden selection:bg-blue-100">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-[-10%] right-[-10%] w-[300px] h-[300px] bg-blue-400/20 rounded-full blur-[80px]" />
         <div className="absolute bottom-[-10%] left-[-10%] w-[250px] h-[250px] bg-orange-400/15 rounded-full blur-[80px]" />
