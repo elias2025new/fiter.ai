@@ -12,8 +12,18 @@ function App() {
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
+    phoneNumber: '',
     experience: '',
   });
+
+  const validateEmail = (email: string) => {
+    return /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(email);
+  };
+
+  const validatePhone = (phone: string) => {
+    // Ethiopian phone format: +251... or 09... or 07...
+    return /^(\+251|0)[79]\d{8}$/.test(phone);
+  };
 
   useEffect(() => {
     if (tg) {
@@ -27,21 +37,32 @@ function App() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validations
+    if (!validateEmail(formData.email)) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+    if (!validatePhone(formData.phoneNumber)) {
+      setError('Please enter a valid Ethiopian phone number (e.g. 0911223344 or +251911223344).');
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
     try {
-      // In production, the URL should be your deployed backend URL
-      // For local development, it might be http://localhost:3001
       const response = await fetch('/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
           experience_level: formData.experience,
+          phone_number: formData.phoneNumber,
           initData: tg?.initData || '',
         }),
       });
+// ... (rest of the handle submit logic)
 
       const result = await response.json();
 
@@ -139,6 +160,18 @@ function App() {
               placeholder="john@example.com"
               value={formData.email}
               onChange={(e) => setFormData({...formData, email: e.target.value})}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-slate-300 mb-2 ml-1">Phone Number (Ethiopian)</label>
+            <input
+              type="tel"
+              required
+              className="w-full bg-slate-900/50 border border-slate-800 rounded-2xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-all placeholder:text-slate-600"
+              placeholder="0911223344"
+              value={formData.phoneNumber}
+              onChange={(e) => setFormData({...formData, phoneNumber: e.target.value})}
             />
           </div>
 

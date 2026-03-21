@@ -20,9 +20,9 @@ app.post('/api/webhook', webhookCallback(bot, 'express'));
 
 // --- Registration API ---
 app.post('/api/register', async (req: Request, res: Response) => {
-  const { fullName, email, experience_level, initData } = req.body;
+  const { fullName, email, phone_number, experience_level, initData } = req.body;
 
-  if (!fullName || !email || !experience_level || !initData) {
+  if (!fullName || !email || !phone_number || !experience_level || !initData) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
@@ -58,6 +58,7 @@ app.post('/api/register', async (req: Request, res: Response) => {
           username: username,
           full_name: fullName,
           email: email,
+          phone_number: phone_number,
           experience_level: experience_level,
         },
       ], { onConflict: 'telegram_id' });
