@@ -18,6 +18,25 @@ app.use(express.json());
 // Note: In production, this should be a protected secret URL
 app.post('/api/webhook', webhookCallback(bot, 'express'));
 
+// --- Check Registration Status ---
+app.get('/api/check', async (req: Request, res: Response) => {
+  const telegramId = req.query.telegram_id as string;
+  if (!telegramId) return res.status(400).json({ error: 'Missing telegram_id' });
+
+  try {
+    const { data, error } = await supabase
+      .from('students')
+      .select('id')
+      .eq('telegram_id', telegramId)
+      .maybeSingle();
+
+    if (error) return res.status(500).json({ error: 'Database error' });
+    return res.status(200).json({ registered: !!data });
+  } catch (err) {
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // --- Registration API ---
 app.post('/api/register', async (req: Request, res: Response) => {
   const { fullName, email, phone_number, experience_level, initData } = req.body;

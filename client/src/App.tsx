@@ -252,6 +252,8 @@ function App() {
     experience: '',
   });
 
+  const [checking, setChecking] = useState(true);
+
   const validateEmail = (email: string) => {
     return /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(email);
   };
@@ -274,12 +276,34 @@ function App() {
       document.documentElement.style.setProperty('--tg-text', tg.textColor || '#f8fafc');
     }
 
-    // Check if user already registered via this device/browser
-    const userId = tg?.initDataUnsafe?.user?.id?.toString() || null;
-    const storageKey = userId ? `fiter_registered_${userId}` : 'fiter_registered_guest';
-    if (localStorage.getItem(storageKey) === 'true') {
-      setRegistered(true);
-    }
+    const checkRegistration = async () => {
+      const userId = tg?.initDataUnsafe?.user?.id?.toString() || null;
+      const storageKey = userId ? `fiter_registered_${userId}` : 'fiter_registered_guest';
+
+      if (localStorage.getItem(storageKey) === 'true') {
+        if (userId) {
+          try {
+            const res = await fetch(`/api/check?telegram_id=${userId}`);
+            const data = await res.json();
+            if (data.registered) {
+              setRegistered(true);
+            } else {
+              localStorage.removeItem(storageKey);
+              setRegistered(false);
+            }
+          } catch (e) {
+            console.error('Failed to check registration:', e);
+            // If API fails (e.g., offline), default to allowing them in
+            setRegistered(true);
+          }
+        } else {
+          setRegistered(true);
+        }
+      }
+      setChecking(false);
+    };
+
+    checkRegistration();
   }, []);
 
   const markRegistered = () => {
@@ -288,6 +312,15 @@ function App() {
     localStorage.setItem(storageKey, 'true');
     setRegistered(true);
   };
+
+  if (checking) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center">
+        <Loader2 className="animate-spin text-blue-500 mb-4" size={32} />
+        <p className="text-slate-400 text-sm font-medium">Loading...</p>
+      </div>
+    );
+  }
 
   if (registered) {
     return (
