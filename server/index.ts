@@ -75,6 +75,47 @@ app.post('/api/register', async (req: Request, res: Response) => {
   }
 });
 
+// --- Admin API ---
+const ADMIN_TELEGRAM_ID = 5908397596;
+
+app.get('/api/admin', async (req: Request, res: Response) => {
+  const botToken = process.env.TELEGRAM_BOT_TOKEN;
+  if (!botToken) return res.status(500).json({ error: 'Server configuration error' });
+
+  const initData = req.headers['x-init-data'] as string;
+  if (!initData) return res.status(401).json({ error: 'Unauthorized' });
+
+  const urlParams = new URLSearchParams(initData);
+  const userString = urlParams.get('user');
+  let userId: number | null = null;
+
+  if (userString) {
+    try { userId = JSON.parse(userString).id; } catch {}
+  }
+
+  const isValid = validateInitData(initData, botToken);
+  if ((!isValid || userId !== ADMIN_TELEGRAM_ID) && process.env.NODE_ENV === 'production') {
+    return res.status(403).json({ error: 'Forbidden' });
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('students')
+      .select('id, telegram_id, username, full_name, email, phone_number, experience_level, created_at')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Supabase Error:', error);
+      return res.status(500).json({ error: 'Failed to fetch registrations' });
+    }
+
+    return res.status(200).json({ students: data });
+  } catch (err) {
+    console.error('Admin Error:', err);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 /**
  * Validates the initData from Telegram Mini App
  */

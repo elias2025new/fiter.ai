@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Loader2, CheckCircle2, AlertCircle, ChevronRight } from 'lucide-react';
+import { Loader2, CheckCircle2, AlertCircle, ChevronRight, Shield, Users, X, Search, Phone, Mail, Calendar } from 'lucide-react';
 
 // Telegram WebApp SDK
 const tg = (window as any).Telegram?.WebApp;
+
+const ADMIN_TELEGRAM_ID = 5908397596;
 
 const LAUNCH_DATE = new Date('2026-04-01T00:00:00+03:00');
 
@@ -84,11 +86,165 @@ function CountdownScreen() {
   );
 }
 
+interface Student {
+  id: string;
+  telegram_id: number;
+  username: string | null;
+  full_name: string;
+  email: string;
+  phone_number: string;
+  experience_level: string;
+  created_at: string;
+}
+
+function AdminPanel({ onClose }: { onClose: () => void }) {
+  const [students, setStudents] = useState<Student[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        const res = await fetch('/api/admin', {
+          headers: { 'x-init-data': tg?.initData || '' },
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed to load');
+        setStudents(data.students);
+      } catch (e: any) {
+        setError(e.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStudents();
+  }, []);
+
+  const filtered = students.filter(s =>
+    s.full_name.toLowerCase().includes(search.toLowerCase()) ||
+    (s.username || '').toLowerCase().includes(search.toLowerCase()) ||
+    s.email.toLowerCase().includes(search.toLowerCase()) ||
+    s.phone_number.includes(search)
+  );
+
+  const expColor = (level: string) => {
+    if (level === 'Beginner') return 'bg-green-100 text-green-700 border-green-200';
+    if (level === 'Intermediate') return 'bg-blue-100 text-blue-700 border-blue-200';
+    return 'bg-purple-100 text-purple-700 border-purple-200';
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 flex flex-col bg-slate-900 text-white"
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 py-4 border-b border-slate-700/60 bg-slate-800/80 backdrop-blur-md">
+        <div className="flex items-center gap-2">
+          <div className="bg-blue-600 p-1.5 rounded-lg">
+            <Shield size={16} className="text-white" />
+          </div>
+          <div>
+            <h2 className="text-sm font-bold text-white">Admin Panel</h2>
+            <p className="text-[10px] text-slate-400">Fiter.ai · Registrations</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5 bg-blue-600/20 border border-blue-500/30 rounded-full px-3 py-1">
+            <Users size={12} className="text-blue-400" />
+            <span className="text-xs font-bold text-blue-300">{students.length}</span>
+          </div>
+          <button
+            onClick={onClose}
+            className="bg-slate-700 hover:bg-slate-600 p-2 rounded-xl transition-colors"
+          >
+            <X size={16} />
+          </button>
+        </div>
+      </div>
+
+      {/* Search */}
+      <div className="px-4 py-3 bg-slate-800/40">
+        <div className="flex items-center gap-2 bg-slate-700/60 rounded-xl px-3 py-2.5 border border-slate-600/40">
+          <Search size={14} className="text-slate-400 shrink-0" />
+          <input
+            type="text"
+            placeholder="Search name, email, phone..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            className="bg-transparent text-xs text-white placeholder:text-slate-500 outline-none w-full"
+          />
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
+        {loading && (
+          <div className="flex items-center justify-center h-40">
+            <Loader2 className="animate-spin text-blue-400" size={28} />
+          </div>
+        )}
+        {error && (
+          <div className="flex items-center gap-3 bg-red-900/30 border border-red-700/40 rounded-2xl p-4 text-red-300 text-xs">
+            <AlertCircle size={16} />
+            <span>{error}</span>
+          </div>
+        )}
+        {!loading && !error && filtered.length === 0 && (
+          <div className="text-center py-16 text-slate-500 text-sm">No students found.</div>
+        )}
+        {!loading && !error && filtered.map((s, i) => (
+          <motion.div
+            key={s.id}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.03 }}
+            className="bg-slate-800/60 border border-slate-700/50 rounded-2xl p-4 space-y-2.5"
+          >
+            <div className="flex items-start justify-between gap-2">
+              <div>
+                <p className="font-bold text-sm text-white">{s.full_name}</p>
+                <p className="text-[11px] text-slate-400">
+                  {s.username ? `@${s.username}` : `ID: ${s.telegram_id}`}
+                </p>
+              </div>
+              <span className={`text-[10px] font-bold px-2 py-1 rounded-full border ${expColor(s.experience_level)}`}>
+                {s.experience_level}
+              </span>
+            </div>
+            <div className="space-y-1.5">
+              <div className="flex items-center gap-2 text-[11px] text-slate-300">
+                <Mail size={11} className="text-slate-500 shrink-0" />
+                <span className="truncate">{s.email}</span>
+              </div>
+              <div className="flex items-center gap-2 text-[11px] text-slate-300">
+                <Phone size={11} className="text-slate-500 shrink-0" />
+                <span>{s.phone_number}</span>
+              </div>
+              <div className="flex items-center gap-2 text-[11px] text-slate-400">
+                <Calendar size={11} className="text-slate-500 shrink-0" />
+                <span>{new Date(s.created_at).toLocaleString('en-ET', { dateStyle: 'medium', timeStyle: 'short' })}</span>
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
+  );
+}
+
 function App() {
   const [loading, setLoading] = useState(false);
   const [registered, setRegistered] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [step, setStep] = useState(1);
+  const [showAdmin, setShowAdmin] = useState(false);
+
+  const currentUserId = tg?.initDataUnsafe?.user?.id || null;
+  const isAdmin = currentUserId === ADMIN_TELEGRAM_ID;
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -134,7 +290,25 @@ function App() {
   };
 
   if (registered) {
-    return <CountdownScreen />;
+    return (
+      <>
+        <CountdownScreen />
+        {isAdmin && (
+          <>
+            <button
+              onClick={() => setShowAdmin(true)}
+              className="fixed bottom-6 right-4 z-50 flex items-center gap-2 bg-slate-900 text-white text-xs font-bold px-4 py-2.5 rounded-2xl shadow-xl border border-slate-700 hover:bg-slate-800 active:scale-[0.97] transition-all"
+            >
+              <Shield size={14} className="text-blue-400" />
+              Admin
+            </button>
+            <AnimatePresence>
+              {showAdmin && <AdminPanel onClose={() => setShowAdmin(false)} />}
+            </AnimatePresence>
+          </>
+        )}
+      </>
+    );
   }
 
   const handleNext = () => {
@@ -418,6 +592,22 @@ function App() {
           Secure Registration • Powered by Fiter.ai
         </p>
       </footer>
+
+      {/* Admin button - only visible to admin */}
+      {isAdmin && (
+        <>
+          <button
+            onClick={() => setShowAdmin(true)}
+            className="fixed bottom-6 right-4 z-50 flex items-center gap-2 bg-slate-900 text-white text-xs font-bold px-4 py-2.5 rounded-2xl shadow-xl border border-slate-700 hover:bg-slate-800 active:scale-[0.97] transition-all"
+          >
+            <Shield size={14} className="text-blue-400" />
+            Admin
+          </button>
+          <AnimatePresence>
+            {showAdmin && <AdminPanel onClose={() => setShowAdmin(false)} />}
+          </AnimatePresence>
+        </>
+      )}
     </div>
   );
 }
