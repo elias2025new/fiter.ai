@@ -8,6 +8,6 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
   },
-  "include": ["api/**/*.ts", "bot/**/*.ts", "utils/**/*.ts"],
+  "include": ["index.ts", "api/**/*.ts", "bot/**/*.ts", "utils/**/*.ts"],
   "exclude": ["node_modules", ".vercel"]
 }

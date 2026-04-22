@@ -7,7 +7,7 @@ const tg = (window as any).Telegram?.WebApp;
 
 const ADMIN_TELEGRAM_ID = 5908397596;
 
-const LAUNCH_DATE = new Date('2026-04-01T00:00:00+03:00');
+const LAUNCH_DATE = new Date('2026-05-20T00:00:00+03:00');
 
 function useCountdown() {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
@@ -74,7 +74,7 @@ function CountdownScreen() {
             ))}
           </div>
           <p className="text-slate-500 text-xs mt-4 font-medium">
-            April 1, 2025 · Addis Ababa Time
+            May 20, 2026 · Addis Ababa Time
           </p>
         </div>
 
